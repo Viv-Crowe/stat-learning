@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage{graphicx} % For figures
+\usepackage{float} % For figure positioning
+\usepackage{subcaption} % For side-by-side figures
+\usepackage{amsmath} % For math environments align, aligned, gather, gathered, multline
+
+\begin{document}
+    \raggedright
+    \title{STAT380: Assignment 1  \\}
+    \author{Vivienne Crowe ID:40071153}
+    \date{4/10/21}
+    
+    \maketitle
+
+    \section{Part A}
+
+    \section{Part B}
+
+    \subsection{}
+    \subsection{}
+
+    
+
+    \subsection{}
+
+    (a)
+    $n$ is 100, $p$ is 2. Let $\epsilon \sim N[0,1]$, then the model is
+
+    \[Y = X-2 \cdot X^2 + \epsilon\]
+
+    (b) It looks like a quadratic relationship, values appear more dense around the origin
+
+    (c) The LOOVC errors for the models i-iv are:
+    i. 7.288
+    ii. 0.937 
+    iii. 0.957 
+    iv. 0.954
+
+    (d) With the new seed, the errors were the same. This was expected 
+    because in the LOOCV procedure all possible subsets of size $n-1$ are 
+    considered so the order that they are selected (which is random), does not 
+    impacted the minimum error obtained.
+
+    (e) The quadratic model has the smallest error, which was expected as this 
+    was precisely the underlying model.
+
+    (f) The statistical significance for the coeffecients are consistent with the 
+    conclusions drawn above, p-values for the intercept, first-, and second-order terms are all 
+    very small (on the order of $10^{-8}$ or less), whereas coefficient estimates for the third-, 
+    and fourth-order terms are much larger, around $10^{-1}$.
+ 
+\end{document}
