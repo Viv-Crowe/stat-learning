@@ -3,23 +3,120 @@
 \usepackage{float} % For figure positioning
 \usepackage{subcaption} % For side-by-side figures
 \usepackage{amsmath} % For math environments align, aligned, gather, gathered, multline
+\usepackage{multirow}
+\usepackage{pifont} % for checkmarks and crosses
+
 
 \begin{document}
     \raggedright
     \title{STAT380: Assignment 1  \\}
-    \author{Vivienne Crowe ID:40071153}
+    \author{Vivienne Crowe ID:40071153 \and Fardin Sikder}
     \date{4/10/21}
-    
     \maketitle
-
     \section{Part A}
+    \subsection{}
+
+    Let $x_i$ denote the $i$-th row of the matrix$\bf{X}$
+
+    \begin{center}
+        \begin{tabular}{ |c||c|c|c|  }
+            \hline
+            \multicolumn{4}{|c|}{kNN}\\
+            \hline
+            i & $||x_i-x_0||_2$ & $\in N_0$  when $k = 1$ &$\in N_0$  when $k = 3$\\
+            \hline
+            1 & 1 &\ding{51} & \ding{51}\\
+            2 & $\sqrt{2}$ & \ding{55} & \ding{51}\\
+            3 & $\sqrt{5}$ & \ding{55} & \ding{55}\\
+            4 & $\sqrt{3}$ & \ding{55} & \ding{51}\\
+            5 & $3$ & \ding{55} & \ding{55}\\
+            6 & $\sqrt{5}$ & \ding{55} & \ding{55}\\
+            \hline
+           \end{tabular}
+        \end{center}
+
+        Hence, for $k=1$  $\hat{y}_0 = y_1 = 0$, and when $k=3$  $\hat{y}_0 = \frac{1}{1}(0+5-5) = 0$.
+
+    \subsection{}
+
+    \begin{center}
+    \begin{tabular}{ |c||c|c|c|  }
+        \hline
+        \multicolumn{4}{|c|}{Parzen Window}\\
+        \hline
+        i & $||x_i-x_0||_2$ & $\in W_0$ when $D = 2$ &$\in W_0$ when $D = 3$\\
+        \hline
+        1 & 1 &\ding{51} & \ding{51}\\
+        2 & $\sqrt{2}$ & \ding{51} & \ding{51}\\
+        3 & $\sqrt{5}$ & \ding{55} & \ding{51}\\
+        4 & $\sqrt{3}$ & \ding{51} & \ding{51}\\
+        5 & $3$ & \ding{55} & \ding{51}\\
+        6 & $\sqrt{5}$ & \ding{55} & \ding{51}\\
+        \hline
+       \end{tabular}
+    \end{center}
+
+    When $D=2$ the Parzen Window prediction is $\hat{y}_0 = \frac{1}{3}(0+5-5) = 0$.
+    When $D=3$ the Parzen Window prediction is $\hat{y}_0 = \frac{1}{6}(0+5+6-5+4+1) = \frac{11}{6}$
+
+    \subsection{A.3}
+
+    First note that the expectation of $MSE_{test}$, 
+     is independent of the number of values in the test set.
+     \[\begin{aligned}
+        & E \left[ \frac{1}{m} \sum_{i=1}^m (y^*_i-\hat{\beta}^Tx^*_i)^2 \right] \\
+        = &  \frac{1}{m} \sum_{i=1}^m E \left[(y^*_i-\hat{\beta}^Tx^*_i)^2 \right]\\
+        = &   E \left[(y^*-\hat{\beta}^Tx^*)^2 \right]
+     \end{aligned}
+    \]
+
+    Therefore, I can choose $m=n$. Now let $\hat{\beta}^{*}$ denote the OLS parameters  
+    obtained by fitting a linear model to the test set, and note that the following random variables are identically distributed.
+
+    \[\begin{aligned}
+        & \frac{1}{n} \sum_{i=1}^n (y_i-\hat{\beta}^Tx_i)^2 \\
+        & \frac{1}{n} \sum_{i=1}^n (y^*_i-\hat{\beta}^{*T}x^*_i)^2 \\
+     \end{aligned}
+    \]
+
+    Since $\hat{\beta}^{*}$ is defined as:
+    \[\arg\min_{\beta}\frac{1}{n} \sum_{i=1}^n (y^*_i-\beta^Tx^*_i)^2 := \arg\min_{\beta} f(x^*, y^*, \beta)\] 
+    then the value of $f$ will be larger for any other value of $\beta$ other than $\hat{\beta}^{*T}$.
+    Therefore,
+    \[
+        \begin{aligned}
+            E\left[\frac{1}{n} \sum_{i=1}^n (y_i-\hat{\beta}^Tx_i)^2 \right] &\leq E\left[\frac{1}{n} \sum_{i=1}^n (y^*_i-\hat{\beta}^Tx^*_i)^2 \right]\\
+            E[MSE_{train}] &\leq E[MSE_{test}]
+        \end{aligned}
+    \]
+
+    \subsection{A.4}
+
+    (a) The reduced form is:
+    \[\min_\theta (f_\theta(x_1)-\bar{y})^2\]
+    where $\bar{y}=\sum_{i=1}^n \frac{y_i}{n}$.
+
+    (b) The reduced weighted least squares is:
+
+    \[\min_\theta \sum_{i=1}^k \frac{r_i}{n} \left( f_\theta(x_i)-\bar{y}_i\right)^2\]
+    where $\bar{y_i}=\sum_{i=1}^n \frac{y_i^{(j)}}{n}$.
+
 
     \section{Part B}
-
     \subsection{}
-    \subsection{}
+    (d) There are a few problems. The residuals vs fitted plot suggests non-independence of errors,  
+    since smaller fitted values correspond with positive errors. 
+    The variance of the residuals is also non-constant - it's increasing with the fitted value.
 
-    
+    There is also one point that (row 14) which has unusally high leverage. 
+
+    (e) We first considered all possible pair-wise interactions to obtain the following shortlist of 
+    interaction terms to consider adding to the model. 
+
+    \begin{itemize}
+        \item  
+    \end{itemize}
+
 
     \subsection{}
 
