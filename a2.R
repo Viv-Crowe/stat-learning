@@ -1,8 +1,7 @@
 ############ Assignment 2: Part B ##############
 
-
 # B.1 --------
-# This code has been adapted from code by Prof. Frédéric Godin (Concordia)
+# This code has been adapted from that of Prof. Frédéric Godin (Concordia)
 
 PredictNearestNeighborsParzen1D <- function(yval, xval, xpred, WindowSize){
 
@@ -29,13 +28,13 @@ PredictNearestNeighborsParzen1D <- function(yval, xval, xpred, WindowSize){
   
 }
 
-# Part b - simulating the data ----
+##### Part b - simulating the data #####
 
 set.seed(2022) #Set the random seed (ensures results are reproducible)
 
 
-nIN = 200 # number of  observations insample
-nOOS = 200 # number of  observations out-of-sample
+nIN = 200 # number of in-sample observations 
+nOOS = 200 # number of out-of-sample observations 
 
 x_min =-2 # min x value
 x_max = 2 # max x value
@@ -47,7 +46,7 @@ fOOS = 0.05*xvalOOS^5 -3*xvalOOS^2 # true pattern for out-of-sample observations
 yobsIS = fIS + rnorm(nIN) # noisy in sample observations
 yobsOOS = fOOS + rnorm(nOOS) # noisy out-of-sample observations
 
-# Part c - predictions ----
+##### Part c - predictions using the Parzen window method #####
 
 xpred <- seq(from=x_min, to=x_max, by = 0.01)
 PWvalues <- c(0.1, 0.5)
@@ -59,7 +58,6 @@ colors <- viridis::rocket(3) # color rainbow for the plot
 for(PW in PWvalues) {
   
   PWpreds = PredictNearestNeighborsParzen1D(yval=yobsIS,xval=xvalIS,xpred=xpred, WindowSize = PW)
-  
   lines(xpred, PWpreds, col=colors[which(PWvalues == PW)], lwd = 1.8)
   
 }
@@ -67,7 +65,7 @@ for(PW in PWvalues) {
 legendlist = c(paste("D=",toString(PWvalues[1]),sep=""),  paste("D=",toString(PWvalues[2]),sep=""))
 legend(y=-6, x=-1, legend=legendlist, col=colors, lty=c(1,1), lwd = 1.8)
 
-# Part d
+##### Part d - testing different parameter values #####
 
 PWvalues2 = seq(0.05,1, 0.05)
 ValidationMSE = rep(0,length(PWvalues2))
@@ -83,78 +81,66 @@ for(PW in 1:length(PWvalues2)) {
   
 }
 
-# Part f
-
 plot(PWvalues2, TrainingMSE, main='Training vs Validation MSE', type='n',
      ylab='MSE',xlab='D')
 lines(PWvalues2, TrainingMSE, col='blue', type="p", pch=1)
 lines(PWvalues2, ValidationMSE, col='red', type="p", pch=1)
 
-# Part f
+##### Part e - selecting the best parameter value #####
 
 bestD <- PWvalues2[which.min(ValidationMSE)]
 
 abline(v=bestD, col='darkgreen')
 legend(y=1.3, x=0.63, legend=c('Training MSE','Validation MSE','Optimal D'), col=c('blue','red','darkgreen') , lty=c(0,0,1), pch=c(1,1,NaN))
 
-
 # B.2 --------
+# The code for parts B.2 and B.3 has been adapted from examples in the ISL textbook
 
 library(ISLR2)
 
-Auto <- read.table("Datasets/Auto.data", header = T, na.strings = "?",
-                   stringsAsFactors = T)
+Auto <- read.table("Datasets/Auto.data", header = T, na.strings = "?", stringsAsFactors = T)
 Auto <- na.omit(Auto) 
 
-# Part a
+#####  Part a - matrix of scatter plots ##### 
 plot(Auto)
 
-# Part b
+##### Part b - correlation matrix ##### 
 # remove "name" variable, then find correlation matrix
 colNumOfName <- match("name", names(Auto)) 
 cor(Auto[-colNumOfName])
 
-# Part c
+##### Part c - multiple linear regression #####
 lm.fit <- lm(mpg ~. -name, data = Auto)
 summary(lm.fit)
 
-# Part d
+##### Part d #####
 plot(lm.fit)
 
 # identify the point with high leverage
 which.max(hatvalues(lm.fit))
 
-# Part e
+##### Part e #####
 
 # Get just the quantitative variables
 colNumOfQualVars <- match(c("name", "cylinders", "origin"), names(Auto))
 
-# define MSE function
-mse <- function(sm) 
-  mean(sm$residuals^2)
-
 formulas <- list()
-errors <- vector()
 
 formulas[[1]] <- as.formula("mpg ~ (.)^2")
 formulas[[2]] <- as.formula("mpg ~ . + displacement:horsepower + acceleration:weight")
-formulas[[3]] <- as.formula("mpg ~ displacement*horsepower")
+formulas[[3]] <- as.formula("mpg ~ displacement*weight")
 formulas[[4]] <- as.formula("mpg ~ weight*year + horsepower*acceleration")
 formulas[[5]] <- as.formula("mpg ~ weight*year + horsepower*acceleration + displacement")
-formulas[[6]] <- as.formula("mpg ~ . -year:weight")
+formulas[[6]] <- as.formula("mpg ~ (.)^2 -year:weight")
 # formulas[[7]] <- as.formula("mpg ~ .")
 # formulas[[8]] <- as.formula("mpg ~ .")
 # formulas[[9]] <- as.formula("mpg ~ .")
 
 for(i in 1:length(formulas)){
   lm.fit <- lm(formulas[[i]] , data = Auto[-colNumOfQualVars])
-  sm <- summary(lm.fit)
-  errors[i] <- mse(sm)
+  print(paste("Model #: ", i))
+  print(summary(lm.fit))
 }
-
-plot(errors)
-
-lm.fitAll <- lm(formulas[[1]] , data = Auto)
 
 # Considering all predictors and their pair-wise interactions
 lm.fitAll <- lm(mpg ~ (.-name)^2 , data = Auto)
@@ -163,42 +149,57 @@ summary(lm.fitAll)
 lm.fit <- lm(mpg ~.-name + acceleration:horsepower, data = Auto)
 summary(lm.fit)
 
-# Part f
+##### Part f #####
 
 # displacement^2
 lm.fit <- lm(mpg ~. -displacement + I(displacement^2), data = Auto[-colNumOfQualVars])
+summary(lm.fit)
+
+# exp(accleration)
+lm.fit <- lm(mpg ~ . + exp(acceleration) - acceleration, data = Auto[-colNumOfQualVars])
+summary(lm.fit)
+
+# exp(horsepower)
+lm.fit <- lm(mpg ~ . + exp(horsepower) - horsepower, data = Auto[-colNumOfQualVars])
+summary(lm.fit)
+
+# sqrt(horsepower)
+lm.fit <- lm(mpg ~ . + sqrt(horsepower) - horsepower, data = Auto[-colNumOfQualVars])
+summary(lm.fit)
+
+# sqrt(accleration)
+lm.fit <- lm(mpg ~ . + sqrt(acceleration), data = Auto[-colNumOfQualVars])
 summary(lm.fit)
 
 # log() on mpg ----
 lm.fit <- lm(log(mpg) ~., data = Auto[-colNumOfQualVars])
 summary(lm.fit)
 
-
 # B.3 --------
 # Section 5.4, exercise 8 from ISL
-# Part a
+##### Part a #####
 set.seed (1)
 x <- rnorm (100)
 y <- x - 2 * x^2 + rnorm (100)
 df <- data.frame(x, y)
 
-# Part b
+##### Part b #####
 plot(x, y)
 # It looks like a quadratic relationship, values appear more dense around the origin
 
-# Part c
+##### Part c #####
 set.seed(2022)
 
 cv.error <- rep(0, 4)
 
 for (i in 1:4){
-  glm.fit <- glm(y ~ poly(x, i), data = df)
+  glm.fit <- glm(y ~ poly(x), data = df, subset = train)
   cv.error[i] <- cv.glm(df, glm.fit)$delta[1]
 }
 cv.error
 round(cv.error, 3)
 
-# Part d
+##### Part d #####
 set.seed(2023)
 
 cv.error <- rep(0, 4)
@@ -211,9 +212,9 @@ for (i in 1:4){
 cv.error
 round(cv.error, 3)
 
-# Part e (see pdf)
+##### Part e (see pdf)
 
-# Part f (see pdf for interpretation)
+##### Part f (see pdf for interpretation)
 for (i in 1:4){
   print(paste("Model ", i))
   print(summary(fits[[i]]))

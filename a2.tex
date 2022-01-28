@@ -10,8 +10,8 @@
 \begin{document}
     \raggedright
     \title{STAT380: Assignment 1  \\}
-    \author{Vivienne Crowe ID:40071153 \and Fardin Sikder}
-    \date{4/10/21}
+    \author{Vivienne Crowe ID:40071153}
+    \date{25/1/22}
     \maketitle
     \section{Part A}
     \subsection{}
@@ -140,20 +140,37 @@
         which is a reduced, weight least squares problem.
 
     \section{Part B}
+
     \subsection{}
-    (d) There are a few problems. The residuals vs fitted plot suggests non-independence of errors,  
-    since smaller fitted values correspond with positive errors. 
-    The variance of the residuals is also non-constant - it's increasing with the fitted value.
+    Solutions for part (a) and (b) in the .R file.
 
-    There is also one point that (row 14) which has unusally high leverage. 
+    (c) Yes the results of the regression suggest there is a strong relationship between 
+    the predictors and the response. In particular, the variables year, origin, weight and displacement 
+    are statistically significant predictors of miles per gallon. The fitted coefficient on the year 
+    variable tells us that miles per gallon is improving over time.
 
-    (e) We first considered all possible pair-wise interactions to obtain the following shortlist of 
-    interaction terms to consider adding to the model. 
+    (d) There are a few problems. 
+    
+    \begin{enumerate}
+        \item  The residuals vs fitted plot suggests non-independence of errors,  
+        since smaller fitted values correspond with positive errors. 
+        \item The variance of the residuals is non-constant - it's increasing with the fitted value.
+        \item There is also one point that (row 14) which has unusally high leverage. 
+        \item The Q-Q shows there's a deviation from the assumption of normal errors.
+    \end{enumerate}
 
-    \begin{itemize}
-        \item  
-    \end{itemize}
+    Note however that observation 14 is within the threshold defined by the Cook's distance threshold that is commonly 
+    used to identify outliers. \par
 
+    (e) I first considered all possible pair-wise interactions. Under this model the interaction between displacement and 
+    weight was statistically significant. I also looked smaller models, which excluded some predictors, to see how the 
+    regression would change. Under these reduced models other interactions, such as between horsepower and 
+    acceleration, and displacement and weight became significant.
+
+    (f) I found that taking the exponential of the acceleration predictor made it significant.
+    Taking the square root of the horsepower variable increased it's significance. I also tried taking the log of
+    the response variable and found that this increase the F statistics 1.62 times suggesting 
+    a better overall model.
 
     \subsection{}
 
