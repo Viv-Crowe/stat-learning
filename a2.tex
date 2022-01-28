@@ -92,15 +92,52 @@
 
     \subsection{A.4}
 
-    (a) The reduced form is:
-    \[\min_\theta (f_\theta(x_1)-\bar{y})^2\]
-    where $\bar{y}=\sum_{i=1}^n \frac{y_i}{n}$.
+    (a) 
+    
+    \[
+    \begin{aligned}
+        \min_\theta \sum_{i=1}^n(f_\theta(x_i)-y_i)^2\\
+        \min_\theta \sum_{i=1}^n(f^2_\theta(x_i)-2f_\theta(x_i)y_i+y_i^2)\\ 
+        \min_\theta (nf^2_\theta(x_i)-2f_\theta(x_i)n\bar{y}+\sum_{i=1}^ny_i^2)\\ 
+    \end{aligned}
+    \]
+
+    Note that terms only containing $y$ do not effect which value of $\theta$ will minimise 
+    the expression so they can be removed, or added.
+
+    \[
+        \begin{aligned}
+            \min_\theta (nf^2_\theta(x_i)-2nf_\theta(x_i)\bar{y}+\bar{y}^2)\\ 
+            \min_\theta (f_\theta(x_1)-\bar{y})^2\\
+        \end{aligned}
+        \]
+    This gives a reduced OLS problem.
+    
+    Note: $\bar{y}=\sum_{i=1}^n \frac{y_i}{n}$.
 
     (b) The reduced weighted least squares is:
 
-    \[\min_\theta \sum_{i=1}^k \frac{r_i}{n} \left( f_\theta(x_i)-\bar{y}_i\right)^2\]
-    where $\bar{y_i}=\sum_{i=1}^n \frac{y_i^{(j)}}{n}$.
+    \[\min_\theta \sum_{i=1}^k {r_i} \left( f_\theta(x_i)-\bar{y}_i\right)^2\]
+    
 
+    To show why this is true, divide the summation of the full OLS expression 
+    into terms where all the predictor values are the same.
+
+    \[
+    \begin{aligned}
+        \min_\theta \sum_{i=1}^k \sum_{j=1}^{r_i}(f_\theta(x_i)-y_i^{(j)})^2\\
+    \end{aligned}
+    \]
+
+    Following the same argument from part (a), we then have
+
+    \[
+        \begin{aligned}
+            \min_\theta \sum_{i=1}^k r_i(f_\theta(x_i)-\bar{y_i})^2\\
+        \end{aligned}
+        \]
+
+        which is a reduced, weight least squares problem.
 
     \section{Part B}
     \subsection{}
