@@ -1,4 +1,5 @@
 ############ Assignment 2: Part B ##############
+# Vivienne Crowe ID:40071153
 
 # B.1 --------
 # This code has been adapted from that of Prof. Frédéric Godin (Concordia)
@@ -98,7 +99,6 @@ legend(y=1.3, x=0.63, legend=c('Training MSE','Validation MSE','Optimal D'), col
 
 library(ISLR2)
 
-Auto <- read.table("Datasets/Auto.data", header = T, na.strings = "?", stringsAsFactors = T)
 Auto <- na.omit(Auto) 
 
 #####  Part a - matrix of scatter plots ##### 
@@ -177,6 +177,7 @@ summary(lm.fit)
 
 # B.3 --------
 # Section 5.4, exercise 8 from ISL
+library(boot)
 ##### Part a #####
 set.seed (1)
 x <- rnorm (100)
@@ -193,7 +194,7 @@ set.seed(2022)
 cv.error <- rep(0, 4)
 
 for (i in 1:4){
-  glm.fit <- glm(y ~ poly(x), data = df, subset = train)
+  glm.fit <- glm(y ~ poly(x), data = df)
   cv.error[i] <- cv.glm(df, glm.fit)$delta[1]
 }
 cv.error
