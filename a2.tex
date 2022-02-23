@@ -13,9 +13,88 @@
     \maketitle
 
     \section{}
-    \subsection{}
+    
+    \subsection{A.4}
+    
 
-    A.5 
+    (a) Let $d$ denote the number of degree of each spline, $k$ is the number of knots, and $n$ is the number of constraints.
+    \[
+        (d+1)(k+1) - nk
+    \]
+    In this case, we constrain the $0$-th, $1$st and $2$nd derivative, and so $n=3$. The splines are cubic, so $d=3$:
+
+    \[
+        4(k+1) - 3k = k + 4
+    \]
+
+    (b) A cubic spline is a continuous piece-wise function, whose first and second derivatives 
+    are also continuous. 
+    \begin{enumerate}
+        \item Continuity \\
+        $\lim_{x \rightarrow c_i^-} f(x) = \lim_{x \rightarrow c_i^+} f(x)$
+        \item Continuity of 1st derivative \\
+         $\lim_{x \rightarrow c_i^-} f'(x) = \lim_{x \rightarrow c_i^+} f'(x)$
+        \item Continuity of 2nd derivative \\
+        $\lim_{x \rightarrow c_i^-} f''(x) = \lim_{x \rightarrow c_i^+} f''(x)$
+    \end{enumerate}
+
+    To show (1), first consider the boundary between $c_1$ and $c_2$:
+    \[ 
+        \begin{aligned}
+            \lim_{x \rightarrow c_1^-} f(x) & = \sum_{j=0}^4 \beta_j c_1^j + 0  \\
+            \lim_{x \rightarrow c_1^+} f(x) & = \sum_{j=0}^4 \beta_j c_1^j + \lim_{x \rightarrow c_1^+}  \beta_4 b_4(x)  \\
+            & = \sum_{j=0}^4 \beta_j c_1^j  + 0\\
+        \end{aligned}
+    \]
+
+    Now for the general case, between $c_i$ and $c_{i+1}$:
+    \[ 
+        \begin{aligned}
+            \lim_{x \rightarrow c_i^-} f(x) & = \sum_{j=0}^4 \beta_j c_i^j + \sum_{j=4}^{i+2} \beta_{j} b_j(x) + \lim_{x \rightarrow c_i^-} \beta_{i+3}\cdot (x-c_{i})^3_+\\
+            & = \sum_{j=0}^4 \beta_j c_i^j + \sum_{j=4}^{i+2} \beta_{j} b_j(x) \\
+            \lim_{x \rightarrow c_i^+} f(x) & = \sum_{j=0}^4 \beta_j c_i^j + \sum_{j=4}^{i+2} \beta_{j} b_j(x) + \lim_{x \rightarrow c_i^+} \beta_{i+3}\cdot (x-c_{i})^3_+\\
+            & = \sum_{j=0}^4 \beta_j c_i^j + \sum_{j=4}^{i+2} \beta_{j} b_j(x) \\
+        \end{aligned}
+    \]
+
+    To show (2), first note $f'(x)$:
+    \[ 
+        \begin{aligned}
+            f'(x) & = \sum_{j=1}^4 \beta_j j x^{j-1} + \sum_{j=4}^{K+3} 3\beta_{j} (x-c_{j-3})^2_+\\
+        \end{aligned}
+    \]
+
+    Now to check the continuity at $x=c_i$:
+
+    \[ 
+        \begin{aligned}
+            \lim_{x \rightarrow c_i^-} f'(x) & = \sum_{j=1}^4 \beta_j j c_i^{j-1} + \sum_{j=4}^{i+2} 3\beta_{i+3} (x-c_{i})^2_+\\
+            \lim_{x \rightarrow c_i^+} f'(x) & = \sum_{j=1}^4 \beta_j j c_i^{j-1} + \sum_{j=4}^{i+2} 3\beta_{i+3} (x-c_{i})^2_+ + \lim_{x \rightarrow c_i^+} 3\beta_{i+3} (x-c_{i})^2_+ \\
+            & = \sum_{j=1}^4 \beta_j j c_i^{j-1} + \sum_{j=4}^{i+2} 3\beta_{i+3} (x-c_{i})^2_+ \\
+        \end{aligned}
+    \]
+
+
+    For (3)
+    \[ 
+        \begin{aligned}
+            f''(x) & = \sum_{j=2}^4 \beta_j j (j-1)x^{j-2} + \sum_{j=4}^{K+3} 6 \beta_{j} (x-c_{j-3})_+\\
+        \end{aligned}
+    \]
+
+    \[ 
+        \begin{aligned}
+            \lim_{x \rightarrow c_i^-} f'(x) & = \sum_{j=1}^4 \beta_j j c_i^{j-1} + \sum_{j=4}^{i+2} 6\beta_{i+3} (x-c_{i})_+\\
+            \lim_{x \rightarrow c_i^+} f'(x) & = \sum_{j=1}^4 \beta_j j c_i^{j-1} + \sum_{j=4}^{i+2} 6\beta_{i+3} (x-c_{i})_+ + \lim_{x \rightarrow c_i^+} 6\beta_{i+3} (x-c_{i})_+ \\
+            & = \sum_{j=1}^4 \beta_j j c_i^{j-1} + \sum_{j=4}^{i+2} 6\beta_{i+3} (x-c_{i})_+ \\
+        \end{aligned}
+    \]
+
+    (c) Being about to express a cubic spline model in this way demonstrates that it is a type of linear model 
+    since we are able to express $f(x)$ as a linear combination of features. In this case, the features are 
+    a non-linear transformation of the original predictor variables.
+
+    \subsection{A.5 }    
 
     First note that for ordinary least squares:
 
